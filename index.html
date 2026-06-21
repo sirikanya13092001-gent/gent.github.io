@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* แต่งหน้าตา Gantt Chart */
+        .gantt-chart { display: flex; margin-top: 20px; }
+        .gantt-block { border: 2px solid #333; padding: 10px; background: #e0e0e0; text-align: center; }
+    </style>
+</head>
+<body>
+    <h2>My CPU Scheduler (FCFS)</h2>
+    <div id="chart" class="gantt-chart"></div>
+    <p id="result"></p>
+
+    <script>
+        // 1. ใส่ข้อมูลโพรเซสตามโจทย์ของเรา
+        let processes = [
+            { name: "P1", burst: 2 },
+            { name: "P2", burst: 1 },
+            { name: "P3", burst: 8 },
+            { name: "P4", burst: 4 },
+            { name: "P5", burst: 5 }
+        ];
+
+        let currentTime = 0;
+        let totalWaitingTime = 0;
+        let chartHTML = "";
+
+        // 2. ลูปคำนวณ FCFS
+        processes.forEach(p => {
+            let startTime = currentTime;
+            totalWaitingTime += startTime; // เพราะทุกคนมาที่เวลา 0, Waiting Time เลยเท่ากับเวลาที่เริ่มทำ
+            currentTime += p.burst;
+            
+            // วาดกล่อง Gantt Chart ขยายความกว้างตาม Burst Time
+            chartHTML += `<div class="gantt-block" style="width: ${p.burst * 30}px">${p.name}<br>${startTime}-${currentTime}</div>`;
+        });
+
+        // 3. แสดงผลบนหน้าจอ
+        document.getElementById("chart").innerHTML = chartHTML;
+        document.getElementById("result").innerHTML = `Average Waiting Time: ${(totalWaitingTime / processes.length).toFixed(1)} ms`;
+    </script>
+</body>
+</html>
